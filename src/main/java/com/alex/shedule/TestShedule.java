@@ -17,7 +17,7 @@ public class TestShedule
     {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String resut = "";
+        String result = "";
         try {
             Calendar calendar = new GregorianCalendar();
             long startWeek = calendar.getTimeInMillis() - (calendar.get(Calendar.DAY_OF_WEEK) - 2) * 24 * 60 * 60 * 1000L - (calendar.get(Calendar.HOUR_OF_DAY) - 3) * 60 * 60 * 1000L - calendar.get(Calendar.MINUTE) * 60 * 1000L - calendar.get(Calendar.SECOND) * 1000L;
@@ -26,16 +26,33 @@ public class TestShedule
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder builder = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = reader.readLine()) != null)
             {
-                buffer.append(line);
+                builder.append(line);
             }
-            resut = buffer.toString();
-            resut = new String(resut.getBytes(), "UTF-8");
-            System.out.println(resut);
+            result = builder.toString();
+            result = new String(result.getBytes(), "UTF-8");
+            System.out.println("Расписание занятий");
+            System.out.println(result);
+
+
+            System.out.println("Расписание экзаменов");
+            url = new URL("http://gu-unpk.ru/schedule/3094////printexamschedule");
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.connect();
+            urlConnection.setConnectTimeout(2000);
+            inputStream = urlConnection.getInputStream();
+            builder = new StringBuilder();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            while ( (line = reader.readLine()) != null ){
+                builder.append(line);
+            }
+            result = builder.toString();
+            result = new String(result.getBytes(), "UTF-8");
+            System.out.println(result);
         }
 
         catch(Exception e){
